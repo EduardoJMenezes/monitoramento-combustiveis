@@ -26,6 +26,7 @@ services:
     plan: free
     region: oregon
     maxmemoryPolicy: allkeys-lru
+    ipAllowList: []  # Permite acesso apenas de outros serviços Render
 
   # Backend API
   - type: web
