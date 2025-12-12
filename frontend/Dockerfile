@@ -20,6 +20,10 @@ COPY . .
 # Desabilitar durante build para produção
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Variável de ambiente necessária no build time
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
 # Build da aplicação
 RUN corepack enable pnpm && pnpm run build
 
