@@ -2,6 +2,18 @@
 
 Sistema Full Stack para monitoramento de vendas e preços de combustíveis em tempo real.
 
+## 🌐 Deploy em Produção
+
+**Aplicação disponível em:** [https://fuel-frontend-xpnl.onrender.com/](https://fuel-frontend-xpnl.onrender.com/)
+
+A aplicação está hospedada no Render.com com:
+- Frontend (Next.js)
+- Backend (FastAPI)
+- PostgreSQL
+- Redis
+
+> ⚠️ **Nota:** O tier gratuito do Render hiberna serviços inativos. O primeiro acesso pode levar ~1 minuto para acordar os serviços.
+
 ## 🛠️ Stack
 
 **Backend:**
