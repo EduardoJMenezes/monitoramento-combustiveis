@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # 1. Banco de Dados PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: fuel_db
+    restart: always
+    environment:
+      POSTGRES_USER: user_vlab
+      POSTGRES_PASSWORD: password_vlab
+      POSTGRES_DB: fuel_monitor_db
+    # Mapeia a porta para acesso local (opcional, mas útil para debug)
+    ports:
+      - "5432:5432"
+    # Persistência de dados
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # 2. Redis (Cache)
+  redis:
+    image: redis:7-alpine
+    container_name: fuel_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redisdata:/data
+
+  # 3. Backend (FastAPI)
+  backend:
+    # Usa o Dockerfile na pasta ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fastapi_api
+    restart: always
+    # Mapeia porta 8000 local para a porta do container
+    ports:
+      - "8000:8000"
+    environment:
+      # Variável de conexão: **Note que o HOST é o nome do serviço 'db'**
+      DATABASE_URL: postgresql://user_vlab:password_vlab@db/fuel_monitor_db
+      REDIS_URL: redis://redis:6379/0
+      UVICORN_PORT: 8000
+    # Garante que o DB esteja pronto antes de tentar rodar o backend
+    depends_on:
+      - db
+      - redis
+    # Monta o código local no container para desenvolvimento (hot-reload)
+    volumes:
+      - ./backend:/app
+    
+  # 4. Frontend (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fuel_dashboard
+    restart: always
+    ports:
+      - "3000:3000" 
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:8000
+    depends_on:
+      - backend
+
+# Definição do volume para persistência do DB
+volumes:
+  pgdata:
+  redisdata:
