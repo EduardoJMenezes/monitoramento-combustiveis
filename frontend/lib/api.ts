@@ -1,5 +1,5 @@
-// API sempre em localhost porque as requisições são feitas pelo browser (client-side)
-const API_BASE_URL = "http://localhost:8000"
+// API URL - usa variável de ambiente ou localhost como fallback
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 const USE_MOCK_DATA = false // Set to false to use real API
 
 import { getMockCollections, getMockAvgPrices, getMockVolumes, getMockDriverReport } from "./mock-data"
