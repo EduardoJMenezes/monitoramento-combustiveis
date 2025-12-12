@@ -49,6 +49,16 @@ export function KpiCards() {
     return <div className="p-4 bg-destructive/10 text-destructive rounded-lg border border-destructive/20">{error}</div>
   }
 
+  if (data.length === 0) {
+    return (
+      <div className="p-8 text-center bg-muted/30 rounded-lg border border-border/50">
+        <Fuel className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+        <p className="text-muted-foreground font-medium">Sem dados disponíveis</p>
+        <p className="text-sm text-muted-foreground mt-1">Nenhum registro de preço foi encontrado</p>
+      </div>
+    )
+  }
+
   const getFuelColor = (fuelType: string) => {
     if (fuelType.includes("Gasolina")) return "text-amber-500"
     if (fuelType.includes("Etanol")) return "text-green-500"

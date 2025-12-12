@@ -56,6 +56,23 @@ export function VolumeChart() {
     )
   }
 
+  if (data.length === 0) {
+    return (
+      <Card className="bg-card border-border/50">
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold text-foreground">Volume Consumido por Tipo de Veículo</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[300px] flex flex-col items-center justify-center text-center">
+            <div className="text-6xl mb-4">📊</div>
+            <p className="text-muted-foreground font-medium">Sem dados disponíveis</p>
+            <p className="text-sm text-muted-foreground mt-1">Nenhum registro de volume foi encontrado</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   const chartData = data.map((item) => ({
     name: item.vehicle_type,
     value: item.total_volume,

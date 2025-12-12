@@ -116,6 +116,12 @@ export function CollectionsTable() {
           </div>
         ) : error ? (
           <div className="p-4 bg-destructive/10 text-destructive rounded-lg border border-destructive/20">{error}</div>
+        ) : !data || data.data.length === 0 ? (
+          <div className="p-12 text-center bg-muted/30 rounded-lg border border-border/50">
+            <div className="text-6xl mb-4">🔍</div>
+            <p className="text-muted-foreground font-medium text-lg">Sem dados disponíveis</p>
+            <p className="text-sm text-muted-foreground mt-2">Nenhum abastecimento foi encontrado com os filtros aplicados</p>
+          </div>
         ) : (
           <>
             <div className="rounded-lg border border-border overflow-hidden">
