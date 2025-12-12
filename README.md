@@ -131,9 +131,6 @@ xdg-open backend/htmlcov/index.html
 
 **Cobertura atual:** 71% (services 100%, models 100%, schemas 94%+)
 
-## ⚡ Features/htmlcov/index.html
-```
-
 ## ⚡ Features
 
 - ✅ API RESTful com FastAPI
