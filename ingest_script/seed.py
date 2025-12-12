@@ -9,10 +9,11 @@ from faker import Faker
 from random import choice, uniform, randint
 from datetime import datetime, timedelta
 import time
+import os
 
 # Configurações
-API_URL = "http://localhost:8000/ingest"
-NUM_RECORDS = 100  # Número de registros a serem gerados
+API_URL = os.getenv("API_URL", "http://localhost:8000/ingest")
+NUM_RECORDS = int(os.getenv("NUM_RECORDS", "100"))  # Número de registros a serem gerados
 
 # Dados realistas para simulação
 FUEL_TYPES = ["Gasolina", "Etanol", "Diesel S10"]
@@ -108,8 +109,8 @@ def main():
             # Gera os dados
             data = generate_fuel_collection()
             
-            # Envia para a API
-            response = requests.post(API_URL, json=data, timeout=5)
+            # Envia para a API (timeout maior para produção)
+            response = requests.post(API_URL, json=data, timeout=30)
             
             if response.status_code == 201:
                 success_count += 1
@@ -118,6 +119,9 @@ def main():
                 error_count += 1
                 print(f"❌ [{i+1}/{NUM_RECORDS}] Erro {response.status_code}: {response.text[:100]}")
         
+        except requests.exceptions.Timeout:
+            error_count += 1
+            print(f"⏱️  [{i+1}/{NUM_RECORDS}] Timeout - Servidor pode estar iniciando (cold start)")
         except requests.exceptions.RequestException as e:
             error_count += 1
             print(f"❌ [{i+1}/{NUM_RECORDS}] Erro de conexão: {str(e)[:100]}")

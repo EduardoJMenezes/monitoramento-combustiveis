@@ -72,7 +72,9 @@ docker-compose logs frontend
 
 ## 📥 Popular o Banco com Dados Fake
 
-O script `ingest_script/seed.py` gera e envia dados fictícios para a API:
+### 🏠 Ambiente Local
+
+O script `ingest_script/seed.py` gera e envia dados fictícios para a API local:
 
 ```bash
 # Opção 1: Com Python local (requer Python 3.11+)
@@ -88,7 +90,27 @@ docker run --rm --network host -v "${PWD}/ingest_script:/app" -w /app python:3.1
 docker run --rm --network host -v "$PWD/ingest_script:/app" -w /app python:3.11-slim bash -c "pip install -q -r requirements.txt && python seed.py"
 ```
 
-O script gera **100 registros** fictícios e envia para `http://localhost:8000/ingest`.
+### ☁️ Ambiente de Produção (Render)
+
+Para popular o banco de dados em produção, use o mesmo script com variáveis de ambiente:
+
+```bash
+# Instale as dependências (se ainda não tiver)
+cd ingest_script
+pip install -r requirements.txt
+
+# Execute apontando para a API de produção
+# Substitua a URL pela URL do seu backend no Render
+API_URL="https://fuel-backend-xxxx.onrender.com/ingest" python seed.py
+
+# Ou gere menos registros (padrão: 100)
+API_URL="https://fuel-backend-xxxx.onrender.com/ingest" NUM_RECORDS=50 python seed.py
+```
+
+**Notas importantes:**
+- ⏱️ O primeiro acesso pode demorar ~60s (cold start do tier gratuito)
+- 🔄 O script tem timeout de 30s e tratamento de erros para cold starts
+- 📊 Cada requisição gera 1 registro de abastecimento com dados realistas
 
 **Sucesso esperado:** `✅ 100 registros inseridos com sucesso!`
 
